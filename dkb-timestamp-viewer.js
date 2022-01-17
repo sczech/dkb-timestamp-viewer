@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         DKB Timestamp Viewer
 // @namespace    https://github.com/sczech
-// @version      0.2
+// @version      0.3
 // @description  Shows DKB transaction timestamps in Web UI
 // @author       Simon Czech
 // @match        https://banking.beta.dkb.de/*
@@ -73,10 +73,20 @@ function onUrlChange()
 
                         //split the subtitle string into an array to edit it
                         let tx_subtitle_array = tx_subtitle.innerHTML.split("•");
-                        //add the time to the first part of the text
-                        tx_subtitle_array[0] = time_array[2] + "." + time_array[1] + "." + time_array[0].slice(2) + " " + time_array[3] + ":" + time_array[4] + " ";
-                        //join the text back together to a string and assign the value
-                        tx_subtitle.innerHTML = tx_subtitle_array.join("•");
+
+                        if (tx_subtitle_array[0] === "Vorgemerkt")
+                        {
+                            const tx_subtitle_pending = tx_div.children.item(0).children.item(0).children.item(0).children.item(1).children.item(0).children.item(1).children.item(1).children.item(0);
+                            tx_subtitle_pending.innerHTML = "• " + time_array[2] + "." + time_array[1] + "." + time_array[0].slice(2) + " " + time_array[3] + ":" + time_array[4] + " ";
+                        }
+                        else
+                        {
+                            //add the time to the first part of the text
+                            tx_subtitle_array[0] = time_array[2] + "." + time_array[1] + "." + time_array[0].slice(2) + " " + time_array[3] + ":" + time_array[4] + " ";
+                            //join the text back together to a string and assign the value
+                            tx_subtitle.innerHTML = tx_subtitle_array.join("•");
+                        }
+
                     }
                 }
             }
